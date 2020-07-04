@@ -3,14 +3,13 @@
 ### 1. Como gerar a biblioteca:
 
 ```
-ng new projeto-angular --create-application=false
+ng new projeto-angular --create-application=false && cd projeto-angular
 ng g library nome-biblioteca
 ```
 
 ### 2. Compilando a biblioteca:
 
 ```
-cd projeto-angular
 ng build nome-biblioteca --prod
 ng lint nome-biblioteca
 ```
