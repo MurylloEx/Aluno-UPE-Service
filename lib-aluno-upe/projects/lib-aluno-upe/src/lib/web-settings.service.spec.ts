@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LibAlunoUpeService } from './lib-aluno-upe.service';
+import { WebSettingsService } from './web-settings.service';
 
-describe('LibAlunoUpeService', () => {
-  let service: LibAlunoUpeService;
+describe('WebSettingsService', () => {
+  let service: WebSettingsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(LibAlunoUpeService);
+    service = TestBed.inject(WebSettingsService);
   });
 
   it('should be created', () => {

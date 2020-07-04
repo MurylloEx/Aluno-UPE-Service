@@ -2,6 +2,8 @@
  * Public API Surface of lib-aluno-upe
  */
 
-export * from './lib/lib-aluno-upe.service';
-export * from './lib/lib-aluno-upe.component';
-export * from './lib/lib-aluno-upe.module';
+export * from './lib/web-requests.service';
+export * from './lib/web-responses';
+export * from './lib/web-settings.service';
+
+

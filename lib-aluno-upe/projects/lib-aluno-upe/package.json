@@ -6,6 +6,7 @@
     "@angular/core": "^10.0.2"
   },
   "dependencies": {
+    "@ionic-native/http": "^5.27.0",
     "tslib": "^2.0.0"
   }
 }
