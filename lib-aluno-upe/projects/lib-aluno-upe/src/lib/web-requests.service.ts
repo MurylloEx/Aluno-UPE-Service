@@ -1,4 +1,4 @@
-import { HTTP, HTTPResponse } from "@ionic-native/http/ngx";
+import { HTTP, HTTPResponse } from '@ionic-native/http/ngx';
 import { Injectable } from '@angular/core';
 import { WebSettingsService } from './web-settings.service';
 
@@ -24,17 +24,17 @@ export class WebRequestsService {
     }
     else {
       let xhr = new XMLHttpRequest();
-      xhr.responseType = "text";
-      xhr.open("GET", addr + "?" + Object.keys(parameters).map(function (key) { return key + "=" + encodeURIComponent(parameters[key]) }).join("&"), true);
-      xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+      xhr.responseType = 'text';
+      xhr.open('GET', addr + '?' + Object.keys(parameters).map(function (key) { return key + '=' + encodeURIComponent(parameters[key]) }).join('&'), true);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       xhr.onreadystatechange = function () {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-          console.log("Data incoming:");
+          console.log('Data incoming:');
           console.log(this);
-          successCallback({ "data": this.responseText });
+          successCallback({ 'data': this.responseText });
         }
       }
-      if (typeof headers != "undefined" || headers === null) {
+      if (typeof headers != 'undefined' || headers === null) {
         for (let prop in headers) {
           xhr.setRequestHeader(prop, headers[prop]);
         }
@@ -46,7 +46,7 @@ export class WebRequestsService {
 
   public POST(addr, parameters, headers, successCallback, errorCallback) {
     if (!this.webSettings.getDebugModeState()) {
-      if (typeof headers != "object" || headers === null) {
+      if (typeof headers != 'object' || headers === null) {
         headers = {};
       }
       let HttpRequest = new HTTP();
@@ -63,17 +63,17 @@ export class WebRequestsService {
     }
     else {
       let xhr = new XMLHttpRequest();
-      xhr.responseType = "text";
+      xhr.responseType = 'text';
       xhr.onreadystatechange = function () {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-          console.log("Data incoming:");
+          console.log('Data incoming:');
           console.log(this);
-          successCallback({ "data": this.responseText });
+          successCallback({ 'data': this.responseText });
         }
       }
-      xhr.open("POST", addr, true);
-      xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-      if (typeof headers != "object" || headers === null) {
+      xhr.open('POST', addr, true);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      if (typeof headers != 'object' || headers === null) {
         headers = {};
       }
       headers['Content-Type'] = 'application/json';
@@ -87,7 +87,7 @@ export class WebRequestsService {
 
   public PUT(addr, parameters, headers, successCallback, errorCallback) {
     if (!this.webSettings.getDebugModeState()) {
-      if (typeof headers != "object" || headers === null) {
+      if (typeof headers != 'object' || headers === null) {
         headers = {};
       }
       let HttpRequest = new HTTP();
@@ -104,17 +104,17 @@ export class WebRequestsService {
     }
     else {
       let xhr = new XMLHttpRequest();
-      xhr.responseType = "text";
+      xhr.responseType = 'text';
       xhr.onreadystatechange = function () {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-          console.log("Data incoming:");
+          console.log('Data incoming:');
           console.log(this);
-          successCallback({ "data": this.responseText });
+          successCallback({ 'data': this.responseText });
         }
       }
-      xhr.open("PUT", addr, true);
-      xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-      if (typeof headers != "object" || headers === null) {
+      xhr.open('PUT', addr, true);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      if (typeof headers != 'object' || headers === null) {
         headers = {};
       }
       headers['Content-Type'] = 'application/json';
@@ -128,12 +128,12 @@ export class WebRequestsService {
 
   public DELETE(addr, parameters, headers, successCallback, errorCallback) {
     if (!this.webSettings.getDebugModeState()) {
-      if (typeof headers != "object" || headers === null) {
+      if (typeof headers != 'object' || headers === null) {
         headers = {};
       }
       let HttpRequest = new HTTP();
       HttpRequest.delete(
-        addr + (Object.keys(parameters).length > 0 ? '?' : '') + Object.keys(parameters).map(function (key) { return key + "=" + encodeURIComponent(parameters[key]) }).join("&"), 
+        addr + (Object.keys(parameters).length > 0 ? '?' : '') + Object.keys(parameters).map(function (key) { return key + '=' + encodeURIComponent(parameters[key]) }).join('&'), 
         {}, 
         headers
       ).then(data => {
@@ -144,17 +144,17 @@ export class WebRequestsService {
     }
     else {
       let xhr = new XMLHttpRequest();
-      xhr.responseType = "text";
+      xhr.responseType = 'text';
       xhr.onreadystatechange = function () {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-          console.log("Data incoming:");
+          console.log('Data incoming:');
           console.log(this);
-          successCallback({ "data": this.responseText });
+          successCallback({ 'data': this.responseText });
         }
       }
-      xhr.open("DELETE", addr +(Object.keys(parameters).length > 0 ? '?' : '') + Object.keys(parameters).map(function (key) { return key + "=" + encodeURIComponent(parameters[key]) }).join("&"), true);
-      xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-      if (typeof headers != "object" || headers === null) {
+      xhr.open('DELETE', addr +(Object.keys(parameters).length > 0 ? '?' : '') + Object.keys(parameters).map(function (key) { return key + '=' + encodeURIComponent(parameters[key]) }).join('&'), true);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      if (typeof headers != 'object' || headers === null) {
         headers = {};
       }
       headers['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -165,5 +165,86 @@ export class WebRequestsService {
       xhr.send();
     }
   }
+
+  public async RegisterUser(userType, userName, userEmail, userPassword, userCpf, userCellphone, userCampusId, userCourseId){
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/register', {
+        'user_type': userType,
+        'user_name': userName,
+        'user_email': userEmail,
+        'user_password': userPassword,
+        'user_cpf': userCpf,
+        'user_cellphone': userCellphone,
+        'user_campus_id': userCampusId,
+        'user_course_id': userCourseId
+      },
+      {},
+      (data) => {
+        resolve({ success: true, data: data, error: null });
+      }, 
+      (error) => {
+        resolve({ success: true, data: null, error: error });
+      });
+    });
+  }
+
+  public async LoginUser(userAccount, password){
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/register', {
+        'user': userAccount,
+        'password': password
+      },
+      {},
+      (data) => {
+        resolve({ success: true, data: data, error: null });
+      }, 
+      (error) => {
+        resolve({ success: true, data: null, error: error });
+      });
+    });
+  }
+
+  public async LogoutUser(token){
+    return new Promise((resolve, _reject) => {
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/auth/logout/' + token, 
+      {},
+      {}, 
+      (data) => { resolve({ success: true, data: data, error: null }); }, 
+      (error) => { resolve({ success: true, data: null, error: error }); });
+    });
+  }
+
+  public async ForgotPassword(userAccount){
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/password', 
+      {
+        'user': userAccount
+      },
+      {}, 
+      (data) => { resolve({ success: true, data: data, error: null }); }, 
+      (error) => { resolve({ success: true, data: null, error: error }); });
+    });
+  }
+
+  public async ListCampi(){
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/infos/campi', 
+      {},
+      {}, 
+      (data) => { resolve({ success: true, data: data, error: null }); }, 
+      (error) => { resolve({ success: true, data: null, error: error }); });
+    });
+  }
+
+  public async ListCourses(campusId){
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/infos/' + Number(campusId) + '/courses', 
+      {},
+      {}, 
+      (data) => { resolve({ success: true, data: data, error: null }); }, 
+      (error) => { resolve({ success: true, data: null, error: error }); });
+    });
+  }
+
 
 }
