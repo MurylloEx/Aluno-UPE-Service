@@ -81,11 +81,12 @@ export class WebRequestsService {
         xhr.setRequestHeader(prop, headers[prop]);
       }
       xhr.onerror = errorCallback;
-      xhr.send(parameters);
+      xhr.send(JSON.stringify(parameters));
     }
   }
 
-  public PUT(addr, parameters, headers, successCallback, errorCallback) {
+  public PUT(addr, parameters, headers, successCallback, errorCallback)
+  {
     if (!this.webSettings.getDebugModeState()) {
       if (typeof headers != 'object' || headers === null) {
         headers = {};
@@ -122,11 +123,12 @@ export class WebRequestsService {
         xhr.setRequestHeader(prop, headers[prop]);
       }
       xhr.onerror = errorCallback;
-      xhr.send(parameters);
+      xhr.send(JSON.stringify(parameters));
     }
   }
 
-  public DELETE(addr, parameters, headers, successCallback, errorCallback) {
+  public DELETE(addr, parameters, headers, successCallback, errorCallback)
+  {
     if (!this.webSettings.getDebugModeState()) {
       if (typeof headers != 'object' || headers === null) {
         headers = {};
@@ -166,7 +168,8 @@ export class WebRequestsService {
     }
   }
 
-  public async RegisterUser(userType, userName, userEmail, userPassword, userCpf, userCellphone, userCampusId, userCourseId){
+  public async RegisterUser(userType, userName, userEmail, userPassword, userCpf, userCellphone, userCampusId, userCourseId) : Promise<any>
+  {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/register', {
         'user_type': userType,
@@ -179,72 +182,68 @@ export class WebRequestsService {
         'user_course_id': userCourseId
       },
       {},
-      (data) => {
-        resolve({ success: true, data: data, error: null });
-      }, 
-      (error) => {
-        resolve({ success: true, data: null, error: error });
-      });
-    });
-  }
-
-  public async LoginUser(userAccount, password){
-    return new Promise((resolve, _reject) => {
-      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/register', {
-        'user': userAccount,
-        'password': password
-      },
-      {},
-      (data) => {
-        resolve({ success: true, data: data, error: null });
-      }, 
-      (error) => {
-        resolve({ success: true, data: null, error: error });
-      });
-    });
-  }
-
-  public async LogoutUser(token){
-    return new Promise((resolve, _reject) => {
-      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/auth/logout/' + token, 
-      {},
-      {}, 
-      (data) => { resolve({ success: true, data: data, error: null }); }, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
       (error) => { resolve({ success: true, data: null, error: error }); });
     });
   }
 
-  public async ForgotPassword(userAccount){
+  public async LoginUser(userAccount, password) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/login', {
+        'user': userAccount,
+        'password': password
+      },
+      {},
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: true, data: null, error: error }); });
+    });
+  }
+
+  public async LogoutUser(token) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/auth/logout/' + token, 
+      {},
+      {}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: true, data: null, error: error }); });
+    });
+  }
+
+  public async ForgotPassword(userAccount) : Promise<any>
+  {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/password', 
       {
         'user': userAccount
       },
       {}, 
-      (data) => { resolve({ success: true, data: data, error: null }); }, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
       (error) => { resolve({ success: true, data: null, error: error }); });
     });
   }
 
-  public async ListCampi(){
+  public async ListCampi() : Promise<any>
+  {
     return new Promise((resolve, _reject) => {
-      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/infos/campi', 
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/info/campi', 
       {},
       {}, 
-      (data) => { resolve({ success: true, data: data, error: null }); }, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
       (error) => { resolve({ success: true, data: null, error: error }); });
     });
   }
 
-  public async ListCourses(campusId){
+  public async ListCourses(campusId) : Promise<any>
+  {
     return new Promise((resolve, _reject) => {
-      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/infos/' + Number(campusId) + '/courses', 
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/info/' + Number(campusId) + '/courses', 
       {},
       {}, 
-      (data) => { resolve({ success: true, data: data, error: null }); }, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
       (error) => { resolve({ success: true, data: null, error: error }); });
     });
   }
-
 
 }
