@@ -168,7 +168,7 @@ export class WebRequestsService {
     }
   }
 
-  public async RegisterUser(userType, userName, userEmail, userPassword, userCpf, userCellphone, userCampusId, userCourseId) : Promise<any>
+  public async RegisterUser(userType: string, userName: string, userEmail: string, userPassword: string, userCpf: string, userCellphone: string, userCampusId: string, userCourseId: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/register', {
@@ -187,7 +187,7 @@ export class WebRequestsService {
     });
   }
 
-  public async LoginUser(userAccount, password) : Promise<any>
+  public async LoginUser(userAccount: string, password: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/login', {
@@ -200,7 +200,7 @@ export class WebRequestsService {
     });
   }
 
-  public async LogoutUser(token) : Promise<any>
+  public async LogoutUser(token: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/auth/logout', 
@@ -211,7 +211,7 @@ export class WebRequestsService {
     });
   }
 
-  public async ForgotPassword(userAccount) : Promise<any>
+  public async ForgotPassword(userAccount: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/password', 
@@ -235,12 +235,45 @@ export class WebRequestsService {
     });
   }
 
-  public async ListCourses(campusId) : Promise<any>
+  public async ListCourses(campusId: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/info/' + Number(campusId) + '/courses', 
       {},
       {}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: true, data: null, error: error }); });
+    });
+  }
+
+  public async ListPendingUsers(token: string) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/pending', 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: true, data: null, error: error }); });
+    });
+  }
+
+  public async AcceptPendingUser(userId: string, token: string) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/' + Number(userId), 
+      {},
+      {'X-Auth-Token' : token},  
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: true, data: null, error: error }); });
+    });
+  }
+
+  public async RejectPendingUser(userId: string, token: string) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/' + Number(userId), 
+      {},
+      {'X-Auth-Token' : token}, 
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
       (error) => { resolve({ success: true, data: null, error: error }); });
     });
