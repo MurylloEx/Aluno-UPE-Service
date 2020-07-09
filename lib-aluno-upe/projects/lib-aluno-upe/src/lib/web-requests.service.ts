@@ -203,9 +203,9 @@ export class WebRequestsService {
   public async LogoutUser(token) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
-      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/auth/logout/' + token, 
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/auth/logout', 
       {},
-      {}, 
+      {'X-Auth-Token' : token}, 
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
       (error) => { resolve({ success: true, data: null, error: error }); });
     });
