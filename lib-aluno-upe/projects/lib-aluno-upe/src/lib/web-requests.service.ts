@@ -366,8 +366,6 @@ export class WebRequestsService {
   }
 
 
-
-
   public async MgrSearchLocal(search_term: string, token: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
@@ -404,7 +402,40 @@ export class WebRequestsService {
   public async MgrDetailReserve(reserve_id: number, token: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/' + Number(reserve_id), 
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/reserve/' + Number(reserve_id), 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+  
+  public async MgrDeleteReserve(reserve_id: number, token: string) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/reserve/' + Number(reserve_id), 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async MgrListCampusMessage(token: string) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/message/all', 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async MgrCreateCampusMessage(token: string) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/message', 
       {},
       {'X-Auth-Token' : token}, 
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
