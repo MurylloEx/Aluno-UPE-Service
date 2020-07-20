@@ -365,6 +365,10 @@ export class WebRequestsService {
     });
   }
 
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 7548f180afc0c2c0e7e38c1934438b38bcc20e91
 
   public async MgrSearchLocal(search_term: string, token: string) : Promise<any>
   {
