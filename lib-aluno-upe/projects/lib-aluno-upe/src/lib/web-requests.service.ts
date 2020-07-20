@@ -127,6 +127,48 @@ export class WebRequestsService {
     }
   }
 
+  public PATCH(addr, parameters, headers, successCallback, errorCallback)
+  {
+    if (!this.webSettings.getDebugModeState()) {
+      if (typeof headers != 'object' || headers === null) {
+        headers = {};
+      }
+      let HttpRequest = new HTTP();
+      HttpRequest.setDataSerializer('json');
+      HttpRequest.patch(
+        addr,
+        parameters,
+        headers
+      ).then(data => {
+        successCallback(data);
+      }).catch(error => {
+        errorCallback(error);
+      });
+    }
+    else {
+      let xhr = new XMLHttpRequest();
+      xhr.responseType = 'text';
+      xhr.onreadystatechange = function () {
+        if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+          console.log('Data incoming:');
+          console.log(this);
+          successCallback({ 'data': this.responseText });
+        }
+      }
+      xhr.open('PATCH', addr, true);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      if (typeof headers != 'object' || headers === null) {
+        headers = {};
+      }
+      headers['Content-Type'] = 'application/json';
+      for (let prop in headers) {
+        xhr.setRequestHeader(prop, headers[prop]);
+      }
+      xhr.onerror = errorCallback;
+      xhr.send(JSON.stringify(parameters));
+    }
+  }
+
   public DELETE(addr, parameters, headers, successCallback, errorCallback)
   {
     if (!this.webSettings.getDebugModeState()) {
@@ -168,7 +210,7 @@ export class WebRequestsService {
     }
   }
 
-  public async RegisterUser(userType: string, userName: string, userEmail: string, userPassword: string, userCpf: string, userCellphone: string, userCampusId: string, userCourseId: string) : Promise<any>
+  public async AuthRegisterUser(userType: string, userName: string, userEmail: string, userPassword: string, userCpf: string, userCellphone: string, userCampusId: string, userCourseId: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/register', {
@@ -183,11 +225,11 @@ export class WebRequestsService {
       },
       {},
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
-      (error) => { resolve({ success: true, data: null, error: error }); });
+      (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
 
-  public async LoginUser(userAccount: string, password: string) : Promise<any>
+  public async AuthLoginUser(userAccount: string, password: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/login', {
@@ -196,22 +238,22 @@ export class WebRequestsService {
       },
       {},
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
-      (error) => { resolve({ success: true, data: null, error: error }); });
+      (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
 
-  public async LogoutUser(token: string) : Promise<any>
+  public async AuthLogoutUser(token: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/auth/logout', 
       {},
       {'X-Auth-Token' : token}, 
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
-      (error) => { resolve({ success: true, data: null, error: error }); });
+      (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
 
-  public async ForgotPassword(userAccount: string) : Promise<any>
+  public async AuthForgotPassword(userAccount: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/auth/password', 
@@ -220,63 +262,155 @@ export class WebRequestsService {
       },
       {}, 
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
-      (error) => { resolve({ success: true, data: null, error: error }); });
+      (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
 
-  public async ListCampi() : Promise<any>
+  public async InfoListCampi() : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/info/campi', 
       {},
       {}, 
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
-      (error) => { resolve({ success: true, data: null, error: error }); });
+      (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
 
-  public async ListCourses(campusId: string) : Promise<any>
+  public async InfoListCourses(campusId: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/info/' + Number(campusId) + '/courses', 
       {},
       {}, 
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
-      (error) => { resolve({ success: true, data: null, error: error }); });
+      (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
 
-  public async ListPendingUsers(token: string) : Promise<any>
+  public async MgrListPendingUsers(token: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/pending', 
       {},
       {'X-Auth-Token' : token}, 
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
-      (error) => { resolve({ success: true, data: null, error: error }); });
+      (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
 
-  public async AcceptPendingUser(userId: string, token: string) : Promise<any>
+  public async MgrAcceptPendingUser(userId: string, token: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/' + Number(userId), 
       {},
       {'X-Auth-Token' : token},  
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
-      (error) => { resolve({ success: true, data: null, error: error }); });
+      (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
 
-  public async RejectPendingUser(userId: string, token: string) : Promise<any>
+  public async MgrRejectPendingUser(userId: string, token: string) : Promise<any>
   {
     return new Promise((resolve, _reject) => {
       this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/' + Number(userId), 
       {},
       {'X-Auth-Token' : token}, 
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
-      (error) => { resolve({ success: true, data: null, error: error }); });
+      (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
+
+  public async MgrValidateQrCode(qrCode: string, token: string): Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/checkin/validate/' + qrCode, 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+  
+  public async MgrSearchUsers(search_term: string, token: string): Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/user/search/' + search_term, 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+  
+  public async MgrDetailUser(userId: string, token: string): Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/user/' + Number(userId), 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async MgrDeleteUser(userId: string, token: string): Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/user/' + Number(userId), 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+
+
+
+  public async MgrSearchLocal(search_term: string, token: string) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/search/' + String(search_term), 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async MgrDetailLocal(local_id: number, token: string) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/' + Number(local_id), 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async MgrDeleteLocal(local_id: number, token: string) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/' + Number(local_id), 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+  
+  public async MgrDetailReserve(reserve_id: number, token: string) : Promise<any>
+  {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/' + Number(reserve_id), 
+      {},
+      {'X-Auth-Token' : token}, 
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); }, 
+      (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+  
 
 }
