@@ -1,6 +1,6 @@
 {
   "name": "lib-aluno-upe",
-  "version": "0.0.1",
+  "version": "0.0.14",
   "peerDependencies": {
     "@angular/common": "^10.0.2",
     "@angular/core": "^10.0.2",

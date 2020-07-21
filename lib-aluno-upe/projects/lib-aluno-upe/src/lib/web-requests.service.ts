@@ -1,4 +1,4 @@
-import { HTTP, HTTPResponse } from '@ionic-native/http/ngx';
+import { HTTP } from '@ionic-native/http/ngx';
 import { Injectable } from '@angular/core';
 import { WebSettingsService } from './web-settings.service';
 
@@ -349,7 +349,6 @@ export class WebRequestsService {
     });
   }
 
-
   public async MgrSearchLocal(search_term: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/search/' + String(search_term),
@@ -410,15 +409,24 @@ export class WebRequestsService {
     });
   }
 
-  public async MgrCreateCampusMessage(token: string): Promise<any> {
+  public async MgrCreateCampusMessage(title: string, body: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/message',
-        {},
+        { 'message_title': title, 'message_body': body },
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
         (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
 
+  public async MgrDeleteCampusMessage(messageId: string, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/message/' + Number(messageId),
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
 
 }
