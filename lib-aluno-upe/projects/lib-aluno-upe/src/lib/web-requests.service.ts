@@ -369,6 +369,22 @@ export class WebRequestsService {
     });
   }
 
+  public async MgrCreateLocal(courseId: string, localName: string, localDescription: string, localCapacity: string, localBlock: string, localFloor: string, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/course/' + Number(courseId) + '/subject',
+        { 
+          'name': localName,
+          'description': localDescription,
+          'capacity': localCapacity,
+          'block': localBlock,
+          'floor': localFloor
+        },
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
   public async MgrDeleteLocal(local_id: number, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/' + Number(local_id),
@@ -428,5 +444,27 @@ export class WebRequestsService {
         (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
+
+  public async MgrDeleteSubject(courseId: string, subjectId: string, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/course/' + Number(courseId) + '/subject/' + Number(subjectId),
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async MgrCreateSubject(courseId: string, subjectName: string, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/course/' + Number(courseId) + '/subject',
+        { 'name': subjectName },
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+
 
 }
