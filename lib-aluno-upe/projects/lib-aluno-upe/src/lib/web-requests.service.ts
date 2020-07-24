@@ -2,6 +2,15 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { Injectable } from '@angular/core';
 import { WebSettingsService } from './web-settings.service';
 
+export interface UserData {
+  user_name?: null,
+  user_cpf?: null,
+  user_cellphone?: null,
+  user_permissions?: null,
+  campus_id?: null, 
+  course_id?: null
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -389,9 +398,9 @@ export class WebRequestsService {
     });
   }
 
-  public async MgrCreateLocal(courseId: string, localName: string, localDescription: string, localCapacity: string, localBlock: string, localFloor: string, token: string): Promise<any> {
+  public async MgrCreateLocal(localName: string, localDescription: string, localCapacity: string, localBlock: string, localFloor: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/course/' + Number(courseId) + '/subject',
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local',
         { 
           'name': localName,
           'description': localDescription,
@@ -485,6 +494,21 @@ export class WebRequestsService {
     });
   }
 
-
+  public async MgrPatchUser(userId: string, userData: UserData, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.PATCH(this.webSettings.getApiUrlAddress() + '/api/v1/manager/user/' + Number(userId),
+        { 
+          'user_name': userData.user_name,
+          'user_cpf': userData.user_cpf,
+          'user_cellphone': userData.user_cellphone,
+          'user_permissions': userData.user_permissions,
+          'campus_id': userData.campus_id,
+          'course_id': userData.course_id
+        },
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
 
 }
