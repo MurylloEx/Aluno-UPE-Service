@@ -397,6 +397,16 @@ export class WebRequestsService {
     });
   }
 
+  public async MgrViewUserByQrCode(qrCode: number, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/manager/checkin/view/' + Number(qrCode),
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
   public async MgrCreateLocal(localName: string, localDescription: string, localCapacity: string, localBlock: string, localFloor: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local',
