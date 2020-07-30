@@ -271,7 +271,7 @@ export class WebRequestsService {
 
   public async InfoListCourses(campusId: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/info/' + Number(campusId) + '/courses',
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/info/' + encodeURIComponent(campusId) + '/courses',
         {},
         {},
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -281,7 +281,7 @@ export class WebRequestsService {
 
   public async InfoListLocals(campusId: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/info/' + Number(campusId) + '/locals',
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/info/' + encodeURIComponent(campusId) + '/locals',
         {},
         {},
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -291,7 +291,7 @@ export class WebRequestsService {
 
   public async InfoListSubjects(courseId: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/info/course/' + Number(courseId) + '/subjects',
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/info/course/' + encodeURIComponent(courseId) + '/subjects',
         {},
         {},
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -311,7 +311,7 @@ export class WebRequestsService {
 
   public async MgrAcceptPendingUser(userId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/' + Number(userId),
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/' + encodeURIComponent(userId),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -321,7 +321,7 @@ export class WebRequestsService {
 
   public async MgrRejectPendingUser(userId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/' + Number(userId),
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/' + encodeURIComponent(userId),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -331,7 +331,7 @@ export class WebRequestsService {
 
   public async MgrValidateQrCode(qrCode: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/checkin/validate/' + qrCode,
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/checkin/validate/' + encodeURIComponent(qrCode),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -341,7 +341,7 @@ export class WebRequestsService {
 
   public async MgrSearchUsers(searchTerm: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/user/search/' + searchTerm,
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/user/search/' + encodeURIComponent(searchTerm),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -351,7 +351,7 @@ export class WebRequestsService {
 
   public async MgrDetailUser(userId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/user/' + Number(userId),
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/user/' + encodeURIComponent(userId),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -361,7 +361,7 @@ export class WebRequestsService {
 
   public async MgrDeleteUser(userId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/user/' + Number(userId),
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/user/' + encodeURIComponent(userId),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -371,7 +371,7 @@ export class WebRequestsService {
 
   public async MgrSearchLocal(searchTerm: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/search/' + String(searchTerm),
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/search/' + encodeURIComponent(searchTerm),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -379,9 +379,9 @@ export class WebRequestsService {
     });
   }
 
-  public async MgrDetailLocal(localId: number, token: string): Promise<any> {
+  public async MgrDetailLocal(localId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/' + Number(localId),
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/' + encodeURIComponent(localId),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -389,9 +389,9 @@ export class WebRequestsService {
     });
   }
 
-  public async MgrViewUserByQrCode(qrCode: number, token: string): Promise<any> {
+  public async MgrViewUserByQrCode(qrCode: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/manager/checkin/view/' + Number(qrCode),
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/manager/checkin/view/' + encodeURIComponent(qrCode),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -414,9 +414,10 @@ export class WebRequestsService {
         (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
+
   public async MgrSearchReserve(searchTerm: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/manager/reserve/search/' + String(searchTerm),
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/manager/reserve/search/' + encodeURIComponent(searchTerm),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -424,9 +425,9 @@ export class WebRequestsService {
     });
   }
 
-  public async MgrDeleteLocal(localId: number, token: string): Promise<any> {
+  public async MgrDeleteLocal(localId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/' + Number(localId),
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local/' + encodeURIComponent(localId),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -434,9 +435,9 @@ export class WebRequestsService {
     });
   }
 
-  public async MgrDetailReserve(reserveId: number, token: string): Promise<any> {
+  public async MgrDetailReserve(reserveId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/reserve/' + Number(reserveId),
+      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/reserve/' + encodeURIComponent(reserveId),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -444,9 +445,9 @@ export class WebRequestsService {
     });
   }
 
-  public async MgrDeleteReserve(reserveId: number, token: string): Promise<any> {
+  public async MgrDeleteReserve(reserveId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/reserve/' + Number(reserveId),
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/reserve/' + encodeURIComponent(reserveId),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -454,13 +455,13 @@ export class WebRequestsService {
     });
   }
 
-  public async MgrPatchReserve(reserveId: number, userData: any, token: string): Promise<any> {
+  public async MgrPatchReserve(reserveId: string, reserveData: any, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.PATCH(this.webSettings.getApiUrlAddress() + '/api/v1/manager/reserve/' + Number(reserveId),
+      this.PATCH(this.webSettings.getApiUrlAddress() + '/api/v1/manager/reserve/' + encodeURIComponent(reserveId),
         {
-          'date': userData.user_name,
-          'begin_time': userData.user_cpf,
-          'end_time': userData.end_time,
+          'date': reserveData.user_name,
+          'begin_time': reserveData.user_cpf,
+          'end_time': reserveData.end_time,
         },
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -490,7 +491,7 @@ export class WebRequestsService {
 
   public async MgrDeleteCampusMessage(messageId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/message/' + Number(messageId),
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/message/' + encodeURIComponent(messageId),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -500,7 +501,7 @@ export class WebRequestsService {
 
   public async MgrDeleteSubject(courseId: string, subjectId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/course/' + Number(courseId) + '/subject/' + Number(subjectId),
+      this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/course/' + encodeURIComponent(courseId) + '/subject/' + encodeURIComponent(subjectId),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -510,7 +511,7 @@ export class WebRequestsService {
 
   public async MgrCreateSubject(courseId: string, subjectName: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/course/' + Number(courseId) + '/subject',
+      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/course/' + encodeURIComponent(courseId) + '/subject',
         { 'name': subjectName },
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -520,7 +521,7 @@ export class WebRequestsService {
 
   public async MgrPatchUser(userId: string, userData: any, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.PATCH(this.webSettings.getApiUrlAddress() + '/api/v1/manager/user/' + Number(userId),
+      this.PATCH(this.webSettings.getApiUrlAddress() + '/api/v1/manager/user/' + encodeURIComponent(userId),
         {
           'user_name': userData.user_name,
           'user_cpf': userData.user_cpf,
@@ -545,9 +546,9 @@ export class WebRequestsService {
     });
   }
 
-  public async StdJoinReserve(reserveId: number, token: string): Promise<any> {
+  public async StdJoinReserve(reserveId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.POST(this.webSettings.getApiUrlAddress() + `/api/v1/student/reserve/${Number(reserveId)}/join`,
+      this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/student/reserve/' + encodeURIComponent(reserveId) + '/join',
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -577,7 +578,7 @@ export class WebRequestsService {
 
   public async StdCheckout(qrCode: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.DELETE(this.webSettings.getApiUrlAddress() + `/api/v1/student/checkout/qrcode/${qrCode}`,
+      this.DELETE(this.webSettings.getApiUrlAddress() + '/api/v1/student/checkout/qrcode/' + encodeURIComponent(qrCode),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -585,7 +586,7 @@ export class WebRequestsService {
     });
   }
 
-  public async PrfListAllMessages(token: string): Promise<any> {
+  public async PfListAllMessages(token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/professor/message/all',
         {},
@@ -595,9 +596,9 @@ export class WebRequestsService {
     });
   }
 
-  public async PrfCreateMessage(courseId: number, reserveData: any, token: string): Promise<any> {
+  public async PfCreateMessage(courseId: string, reserveData: any, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + `/api/v1/professor/message/${courseId}`,
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/professor/message/' + encodeURIComponent(courseId),
         {
           'message_title': reserveData.message_title,
           'message_body': reserveData.message_body,
