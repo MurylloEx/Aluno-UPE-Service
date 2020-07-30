@@ -2,14 +2,6 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { Injectable } from '@angular/core';
 import { WebSettingsService } from './web-settings.service';
 
-export interface UserData {
-  user_name: null,
-  user_cpf: null,
-  user_cellphone: null,
-  user_permissions: null,
-  campus_id: null, 
-  course_id: null
-}
 
 @Injectable({
   providedIn: 'root'
