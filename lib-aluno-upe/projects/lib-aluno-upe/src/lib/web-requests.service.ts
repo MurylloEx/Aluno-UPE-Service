@@ -3,17 +3,13 @@ import { Injectable } from '@angular/core';
 import { WebSettingsService } from './web-settings.service';
 
 export interface UserData {
-  user_name?: null,
-  user_cpf?: null,
-  user_cellphone?: null,
-  user_permissions?: null,
-  campus_id?: null,
-  course_id?: null
+  user_name: null,
+  user_cpf: null,
+  user_cellphone: null,
+  user_permissions: null,
+  campus_id: null,
+  course_id: null
 }
-export interface ReserveData {
-
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -520,7 +516,7 @@ export class WebRequestsService {
     });
   }
 
-  public async MgrPatchUser(userId: string, userData: UserData, token: string): Promise<any> {
+  public async MgrPatchUser(userId: string, userData: any, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.PATCH(this.webSettings.getApiUrlAddress() + '/api/v1/manager/user/' + Number(userId),
         {
