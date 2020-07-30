@@ -2,7 +2,6 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { Injectable } from '@angular/core';
 import { WebSettingsService } from './web-settings.service';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -390,16 +389,35 @@ export class WebRequestsService {
     });
   }
 
+  public async MgrViewUserByQrCode(qrCode: number, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/manager/checkin/view/' + Number(qrCode),
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
   public async MgrCreateLocal(localName: string, localDescription: string, localCapacity: string, localBlock: string, localFloor: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/local',
-        { 
+        {
           'name': localName,
           'description': localDescription,
           'capacity': localCapacity,
           'block': localBlock,
           'floor': localFloor
         },
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+  public async MgrSearchReserve(searchTerm: string, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/manager/reserve/search/' + String(searchTerm),
+        {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
         (error) => { resolve({ success: false, data: null, error: error }); });
@@ -430,6 +448,20 @@ export class WebRequestsService {
     return new Promise((resolve, _reject) => {
       this.DELETE(this.webSettings.getApiUrlAddress() + 'api/v1/manager/reserve/' + Number(reserveId),
         {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async MgrPatchReserve(reserveId: number, userData: any, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.PATCH(this.webSettings.getApiUrlAddress() + '/api/v1/manager/reserve/' + Number(reserveId),
+        {
+          'date': userData.user_name,
+          'begin_time': userData.user_cpf,
+          'end_time': userData.end_time,
+        },
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
         (error) => { resolve({ success: false, data: null, error: error }); });
@@ -489,13 +521,86 @@ export class WebRequestsService {
   public async MgrPatchUser(userId: string, userData: any, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.PATCH(this.webSettings.getApiUrlAddress() + '/api/v1/manager/user/' + Number(userId),
-        { 
+        {
           'user_name': userData.user_name,
           'user_cpf': userData.user_cpf,
           'user_cellphone': userData.user_cellphone,
           'user_permissions': userData.user_permissions,
           'campus_id': userData.campus_id,
           'course_id': userData.course_id
+        },
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async StdReserveAllAvailable(token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/student/reserve/all',
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async StdJoinReserve(reserveId: number, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + `/api/v1/student/reserve/${Number(reserveId)}/join`,
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async StdListAllMessages(token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/student/message/all',
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async StdCheckinGenerateQrCode(token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/student/checkin/qrcode',
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async StdCheckout(qrCode: string, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.DELETE(this.webSettings.getApiUrlAddress() + `/api/v1/student/checkout/qrcode/${qrCode}`,
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async PrfListAllMessages(token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/professor/message/all',
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async PrfCreateMessage(courseId: number, reserveData: any, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + `/api/v1/professor/message/${courseId}`,
+        {
+          'message_title': reserveData.message_title,
+          'message_body': reserveData.message_body,
         },
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
