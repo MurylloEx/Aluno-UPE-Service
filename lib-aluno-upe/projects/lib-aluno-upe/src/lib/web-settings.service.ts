@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class WebSettingsService {
 
   private debugModeState: boolean = false;
-  private apiUrlAddress: string = 'https://www.api-upe.fun/';
+  private apiUrlAddress: string = 'https://www.api-upe.fun';
 
   constructor() {}
 
