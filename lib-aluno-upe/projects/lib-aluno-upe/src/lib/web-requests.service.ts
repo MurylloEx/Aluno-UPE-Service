@@ -314,7 +314,7 @@ export class WebRequestsService {
 
   public async MgrListPendingUsers(token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/pending',
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/manager/users/pending',
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -324,7 +324,7 @@ export class WebRequestsService {
 
   public async MgrAcceptPendingUser(userId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
-      this.POST(this.webSettings.getApiUrlAddress() + 'api/v1/manager/users/' + encodeURIComponent(userId),
+      this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/manager/users/' + encodeURIComponent(userId),
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
