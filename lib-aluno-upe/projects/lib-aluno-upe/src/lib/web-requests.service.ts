@@ -236,9 +236,9 @@ export class WebRequestsService {
         'user': userAccount,
         'password': password
       },
-        {},
-        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
-        (error) => { resolve({ success: false, data: null, error: error }); });
+      { 'X-App-Version': this.webSettings.getAppVersion() },
+      (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+      (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
 

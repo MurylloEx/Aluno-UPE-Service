@@ -7,6 +7,7 @@ export class WebSettingsService {
 
   private debugModeState: boolean = false;
   private apiUrlAddress: string = 'https://www.api-upe.fun';
+  private appVersion: string = '1.0.0';
 
   constructor() {}
 
@@ -24,6 +25,14 @@ export class WebSettingsService {
 
   public getApiUrlAddress(){
     return this.apiUrlAddress;
+  }
+
+  public setAppVersion(version: string){
+    this.appVersion = version;
+  }
+
+  public getAppVersion(){
+    return this.appVersion;
   }
 
 }
