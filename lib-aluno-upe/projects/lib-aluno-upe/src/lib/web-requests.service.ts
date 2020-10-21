@@ -210,6 +210,50 @@ export class WebRequestsService {
 
   //#endregion
 
+  //#region [ MÉTODOS DE CODIFICAÇÃO DE EMOJIS ] 
+
+  private EscapeSpecialEntities(str: string): string {
+    const SPECIAL_CHARSET = new RegExp(/&#\d{4,6};/ig);
+    const FOUND_CHARS = String(str || '').match(SPECIAL_CHARSET) || [];
+    let newStr = String(str || '');
+    for (let idx = 0; idx < FOUND_CHARS.length; idx++) {
+      newStr = newStr.replace(FOUND_CHARS[idx], `\\&\\#${Number(FOUND_CHARS[idx].replace(/[^0-9]/ig, ''))}\\;`);
+    }
+    return newStr;
+  }
+
+  private UnescapeSpecialEntities(str: string): string {
+    const SPECIAL_CHARSET = new RegExp(/\\&\\#\d{4,6}\\;/ig);
+    const FOUND_CHARS = String(str || '').match(SPECIAL_CHARSET) || [];
+    let newStr = String(str || '');
+    for (let idx = 0; idx < FOUND_CHARS.length; idx++) {
+      newStr = newStr.replace(FOUND_CHARS[idx], `${FOUND_CHARS[idx].replace(/[^&#0-9;]/ig, '')}`);
+    }
+    return newStr;
+  }
+
+  private EncodeEmojiChars(str: string): string {
+    const SPECIAL_CHARSET = new RegExp(/(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/ig);
+    const FOUND_CHARS = String(str || '').match(SPECIAL_CHARSET) || [];
+    let newStr = String(str || '');
+    for (let idx = 0; idx < FOUND_CHARS.length; idx++){
+      newStr = newStr.replace(FOUND_CHARS[idx], `&#${FOUND_CHARS[idx].codePointAt(0)};`);
+    }
+    return newStr;
+  }
+
+  private DecodeEmojiChars(str: string): string {
+    const SPECIAL_CHARSET = new RegExp(/&#\d{4,6};/ig);
+    const FOUND_CHARS = String(str || '').match(SPECIAL_CHARSET) || [];
+    let newStr = String(str || '');
+    for (let idx = 0; idx < FOUND_CHARS.length; idx++){
+      newStr = newStr.replace(FOUND_CHARS[idx], String.fromCodePoint(Number(FOUND_CHARS[idx].replace(/[^0-9]/ig, ''))));
+    }
+    return newStr;
+  }
+
+  //#endregion
+
   //#region [ CAMADA DE APIS DE AUTENTICAÇÃO ]
 
   public async AuthRegisterUser(userType: string, userName: string, userEmail: string, userPassword: string, userCpf: string, userCellphone: string, userCampusId: string, userCourseId: string): Promise<any> {
@@ -497,7 +541,11 @@ export class WebRequestsService {
       this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/manager/message/all',
         {},
         { 'X-Auth-Token': token },
-        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (data) => { 
+          let parsed = JSON.parse(data.data);
+          parsed.message_body = this.UnescapeSpecialEntities(this.DecodeEmojiChars(parsed.message_body));
+          resolve({ success: true, data: parsed, error: null }); 
+        },
         (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
@@ -505,7 +553,7 @@ export class WebRequestsService {
   public async MgrCreateCampusMessage(title: string, body: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/manager/message',
-        { 'message_title': title, 'message_body': body },
+        { 'message_title': title, 'message_body': this.EncodeEmojiChars(this.EscapeSpecialEntities(body)) },
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
         (error) => { resolve({ success: false, data: null, error: error }); });
@@ -598,7 +646,11 @@ export class WebRequestsService {
       this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/student/message/all',
         {},
         { 'X-Auth-Token': token },
-        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (data) => { 
+          let parsed = JSON.parse(data.data);
+          parsed.message_body = this.UnescapeSpecialEntities(this.DecodeEmojiChars(parsed.message_body));
+          resolve({ success: true, data: parsed, error: null }); 
+        },
         (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
@@ -678,7 +730,11 @@ export class WebRequestsService {
       this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/professor/message/all',
         {},
         { 'X-Auth-Token': token },
-        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (data) => { 
+          let parsed = JSON.parse(data.data);
+          parsed.message_body = this.UnescapeSpecialEntities(this.DecodeEmojiChars(parsed.message_body));
+          resolve({ success: true, data: parsed, error: null }); 
+        },
         (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
@@ -686,10 +742,7 @@ export class WebRequestsService {
   public async PfCreateMessage(courseId: string, title: string, body: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/professor/message/' + encodeURIComponent(courseId),
-        {
-          'message_title': title,
-          'message_body': body,
-        },
+        { 'message_title': title, 'message_body': this.EncodeEmojiChars(this.EscapeSpecialEntities(body)) },
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
         (error) => { resolve({ success: false, data: null, error: error }); });
