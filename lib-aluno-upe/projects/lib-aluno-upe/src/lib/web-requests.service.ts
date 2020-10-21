@@ -543,7 +543,9 @@ export class WebRequestsService {
         { 'X-Auth-Token': token },
         (data) => { 
           let parsed = JSON.parse(data.data);
-          parsed.message_body = this.UnescapeSpecialEntities(this.DecodeEmojiChars(parsed.message_body));
+          for (let idx = 0; idx < parsed.parameters.length || 0; idx++){
+            parsed.parameters[idx].message_body = this.UnescapeSpecialEntities(this.DecodeEmojiChars(parsed.parameters[idx].message_body));
+          }
           resolve({ success: true, data: parsed, error: null }); 
         },
         (error) => { resolve({ success: false, data: null, error: error }); });
@@ -648,7 +650,9 @@ export class WebRequestsService {
         { 'X-Auth-Token': token },
         (data) => { 
           let parsed = JSON.parse(data.data);
-          parsed.message_body = this.UnescapeSpecialEntities(this.DecodeEmojiChars(parsed.message_body));
+          for (let idx = 0; idx < parsed.parameters.length || 0; idx++){
+            parsed.parameters[idx].message_body = this.UnescapeSpecialEntities(this.DecodeEmojiChars(parsed.parameters[idx].message_body));
+          }
           resolve({ success: true, data: parsed, error: null }); 
         },
         (error) => { resolve({ success: false, data: null, error: error }); });
@@ -732,7 +736,9 @@ export class WebRequestsService {
         { 'X-Auth-Token': token },
         (data) => { 
           let parsed = JSON.parse(data.data);
-          parsed.message_body = this.UnescapeSpecialEntities(this.DecodeEmojiChars(parsed.message_body));
+          for (let idx = 0; idx < parsed.parameters.length || 0; idx++){
+            parsed.parameters[idx].message_body = this.UnescapeSpecialEntities(this.DecodeEmojiChars(parsed.parameters[idx].message_body));
+          }
           resolve({ success: true, data: parsed, error: null }); 
         },
         (error) => { resolve({ success: false, data: null, error: error }); });
