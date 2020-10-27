@@ -633,6 +633,16 @@ export class WebRequestsService {
     });
   }
 
+  public async StdLeaveReserve(reserveId: string, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.DELETE(this.webSettings.getApiUrlAddress() + '/api/v1/student/reserve/' + encodeURIComponent(reserveId) + '/leave',
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
   public async StdSubmitAnalysis(analysisData: any, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/student/analysis/submit',
@@ -749,6 +759,16 @@ export class WebRequestsService {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/professor/message/' + encodeURIComponent(courseId),
         { 'message_title': title, 'message_body': this.EncodeEmojiChars(this.EscapeSpecialEntities(body)) },
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async PfDeleteMessage(ownMessageId: string, token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.DELETE(this.webSettings.getApiUrlAddress() + '/api/v1/professor/message/' + encodeURIComponent(ownMessageId),
+        {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
         (error) => { resolve({ success: false, data: null, error: error }); });
