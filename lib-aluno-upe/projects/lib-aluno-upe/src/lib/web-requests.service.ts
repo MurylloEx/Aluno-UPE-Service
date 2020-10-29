@@ -256,31 +256,36 @@ export class WebRequestsService {
 
   //#region [ CAMADA DE APIS DE AUTENTICAÇÃO ]
 
-  public async AuthRegisterUser(userType: string, userName: string, userEmail: string, userPassword: string, userCpf: string, userCellphone: string, userCampusId: string, userCourseId: string): Promise<any> {
+  public async AuthRegisterUser(userType: string, userName: string, userEmail: string, userPassword: string, userCpf: string, userCellphone: string, userCampusId: string, userCourseId: string, recaptchaToken: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/auth/register', {
-        'user_type': userType,
-        'user_name': userName,
-        'user_email': userEmail,
-        'user_password': userPassword,
-        'user_cpf': userCpf,
-        'user_cellphone': userCellphone,
-        'user_campus_id': userCampusId,
-        'user_course_id': userCourseId
-      },
-        {},
+          'user_type': userType,
+          'user_name': userName,
+          'user_email': userEmail,
+          'user_password': userPassword,
+          'user_cpf': userCpf,
+          'user_cellphone': userCellphone,
+          'user_campus_id': userCampusId,
+          'user_course_id': userCourseId
+        },
+        {
+          'X-Recaptcha-Token': recaptchaToken
+        },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
         (error) => { resolve({ success: false, data: null, error: error }); });
     });
   }
 
-  public async AuthLoginUser(userAccount: string, password: string): Promise<any> {
+  public async AuthLoginUser(userAccount: string, password: string, recaptchaToken: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/auth/login', {
         'user': userAccount,
         'password': password
       },
-      { 'X-App-Version': this.webSettings.getAppVersion() },
+      { 
+        'X-App-Version': this.webSettings.getAppVersion(),
+        'X-Recaptcha-Token': recaptchaToken
+      },
       (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
       (error) => { resolve({ success: false, data: null, error: error }); });
     });
@@ -296,13 +301,15 @@ export class WebRequestsService {
     });
   }
 
-  public async AuthForgotPassword(userAccount: string): Promise<any> {
+  public async AuthForgotPassword(userAccount: string, recaptchaToken: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/auth/password',
         {
           'user': userAccount
         },
-        {},
+        {
+          'X-Recaptcha-Token': recaptchaToken
+        },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
         (error) => { resolve({ success: false, data: null, error: error }); });
     });
