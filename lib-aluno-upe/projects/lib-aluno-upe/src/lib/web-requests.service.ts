@@ -315,6 +315,20 @@ export class WebRequestsService {
     });
   }
 
+  public async AuthRequestFirstAccess(userAccount: string, recaptchaToken: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/auth/welcome',
+        {
+          'user': userAccount
+        },
+        {
+          'X-Recaptcha-Token': recaptchaToken
+        },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
   //#endregion
 
   //#region [ CAMADA DE APIS DE INFORMAÇÕES ]
