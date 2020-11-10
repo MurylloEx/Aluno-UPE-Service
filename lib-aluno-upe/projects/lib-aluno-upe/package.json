@@ -1,6 +1,6 @@
 {
   "name": "@rebase-team/lib-aluno-upe",
-  "version": "3.7.32",
+  "version": "4.7.32",
   "peerDependencies": {
     "@angular/common": "^10.0.2",
     "@angular/core": "^10.0.2",

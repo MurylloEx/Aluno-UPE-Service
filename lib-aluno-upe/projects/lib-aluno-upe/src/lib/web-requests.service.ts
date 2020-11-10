@@ -329,6 +329,20 @@ export class WebRequestsService {
     });
   }
 
+  public async AuthResetPassword(token: string, password: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/auth/reset/password',
+        {
+          'password': password
+        },
+        {
+          'X-Auth-Token': token
+        },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
   //#endregion
 
   //#region [ CAMADA DE APIS DE INFORMAÇÕES ]
