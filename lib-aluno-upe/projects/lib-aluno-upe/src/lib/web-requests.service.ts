@@ -644,6 +644,16 @@ export class WebRequestsService {
     });
   }
 
+  public async MgrShowProfile(token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/manager/profile',
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
   //#endregion
 
   //#region [ CAMADA DE APIS DE ESTUDANTES ]
@@ -707,6 +717,16 @@ export class WebRequestsService {
   public async StdCheckinGenerateQrCode(token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/student/checkin/qrcode',
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async StdShowProfile(token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/student/profile',
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -803,6 +823,16 @@ export class WebRequestsService {
   public async PfDeleteMessage(ownMessageId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.DELETE(this.webSettings.getApiUrlAddress() + '/api/v1/professor/message/' + encodeURIComponent(ownMessageId),
+        {},
+        { 'X-Auth-Token': token },
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async PfShowProfile(token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/professor/profile',
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
