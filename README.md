@@ -69,13 +69,13 @@ export class HomePage implements OnInit {
 }
 ```
 
-## Meta
+## Metadados
 
 Muryllo Pimenta de Oliveira – muryllo.pimenta@upe.br
 
-Distributed under the MIT license. See ``LICENSE`` for more information.
+Distribuído sobre a licença MIT. Veja ``LICENSE`` para mais informações.
 
-## Contributing
+## Contribuição
 
 1. Fork it (<https://github.com/MurylloEx/Aluno-UPE-Service/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
