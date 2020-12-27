@@ -1,27 +1,85 @@
-# Aluno UPE Service
+# Biblioteca Aluno UPE (Driver)
+> Essa biblioteca foi feita para conectar com o endpoint HTTPS do aplicativo Aluno UPE.
 
-### 1. Como gerar a biblioteca:
+<p align="center">
+    <img src="https://badgen.net/npm/v/@rebase-team/lib-aluno-upe"/> 
+    <img src="https://badgen.net/npm/dt/@rebase-team/lib-aluno-upe"/>
+    <img src="https://badgen.net/npm/license/@rebase-team/lib-aluno-upe"/>
+    <img src="https://badgen.net/npm/types/@rebase-team/lib-aluno-upe"/>
+    <img src="https://badgen.net/badge/author/MurylloEx/red?icon=label"/>
+</p>
+
+Para utilizá-la vocês precisa de uma aplicação Angular e utilizar o comando descrito na seção abaixo.
+
+## Instalação
+
+```sh
+ionic cordova plugin add cordova-plugin-advanced-http
+npm install @ionic-native/http
+npm install @rebase-team/lib-aluno-upe
+```
+
+## Exemplos de uso
+
+``> APPMODULE.TS``
+```typescript
+import { HTTP } from "@ionic-native/http/ngx";
+import { AppComponent } from "./app.component";
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { WebRequestsService } from "@rebase-team/lib-aluno-upe";
+import { IonicModule } from "@ionic/angular";
+
+@NgModule({
+  declarations: [],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot()
+  ],
+  providers: [
+    HTTP,
+    WebRequestsService
+  ],
+  bootstrap: [AppComponent],
+  exports: []
+})
+export class AppModule { }
 
 ```
-ng new projeto-angular --create-application=false && cd projeto-angular
-ng g library nome-biblioteca
+
+``> HOME.PAGE.TS``
+```typescript
+import { WebSettingsService, WebResponses, WebRequestsService } from "@rebase-team/lib-aluno-upe";
+
+@Component({
+  selector: "app-home",
+  templateUrl: "home.page.html",
+  styleUrls: ["home.page.scss"],
+})
+export class HomePage implements OnInit {
+
+  constructor(
+    private alunoApiSettings: WebSettingsService,
+    private alunoApi: WebRequestsService
+  ) {
+    this.alunoApiSettings.setDebugModeState(true);
+    this.alunoApiSettings.setAppVersion('5.1.43');
+  }
+
+}
 ```
 
-### 2. Compilando a biblioteca:
+## Meta
 
-```
-ng build nome-biblioteca --prod
-ng lint nome-biblioteca
-```
+Muryllo Pimenta de Oliveira – muryllo.pimenta@upe.br
 
-### 3. Liberando biblioteca pro NPM:
+Distributed under the MIT license. See ``LICENSE`` for more information.
 
-```
-npm publish @rebase-team/nome-biblioteca --access public
-```
+## Contributing
 
-### 4. Instalando a biblioteca:
+1. Fork it (<https://github.com/MurylloEx/Aluno-UPE-Service/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin feature/fooBar`)
+5. Create a new Pull Request
 
-```
-npm install --save @rebase-team/nome-biblioteca
-```
