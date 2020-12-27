@@ -24,14 +24,14 @@ export class WebRequestsService {
       });
     }
     else {
+      let wbReqSvcPtr = this;
       let xhr = new XMLHttpRequest();
       xhr.responseType = 'text';
       xhr.open('GET', addr + '?' + Object.keys(parameters).map(function (key) { return key + '=' + encodeURIComponent(parameters[key]) }).join('&'), true);
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      xhr.onreadystatechange = function () {
+      xhr.onreadystatechange = function() {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-          console.log('Data incoming:');
-          console.log(this);
+          wbReqSvcPtr.XMLHttpResponse2ConsoleDebugger(this, parameters, headers, 'GET', 'green');
           successCallback({ 'data': this.responseText });
         }
       }
@@ -63,12 +63,12 @@ export class WebRequestsService {
       });
     }
     else {
+      let wbReqSvcPtr = this;
       let xhr = new XMLHttpRequest();
       xhr.responseType = 'text';
       xhr.onreadystatechange = function () {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-          console.log('Data incoming:');
-          console.log(this);
+          wbReqSvcPtr.XMLHttpResponse2ConsoleDebugger(this, parameters, headers, 'POST', 'orange');
           successCallback({ 'data': this.responseText });
         }
       }
@@ -104,12 +104,12 @@ export class WebRequestsService {
       });
     }
     else {
+      let wbReqSvcPtr = this;
       let xhr = new XMLHttpRequest();
       xhr.responseType = 'text';
       xhr.onreadystatechange = function () {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-          console.log('Data incoming:');
-          console.log(this);
+          wbReqSvcPtr.XMLHttpResponse2ConsoleDebugger(this, parameters, headers, 'PUT', 'dodgerblue');
           successCallback({ 'data': this.responseText });
         }
       }
@@ -145,12 +145,12 @@ export class WebRequestsService {
       });
     }
     else {
+      let wbReqSvcPtr = this;
       let xhr = new XMLHttpRequest();
       xhr.responseType = 'text';
       xhr.onreadystatechange = function () {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-          console.log('Data incoming:');
-          console.log(this);
+          wbReqSvcPtr.XMLHttpResponse2ConsoleDebugger(this, parameters, headers, 'PATCH', 'black');
           successCallback({ 'data': this.responseText });
         }
       }
@@ -185,12 +185,12 @@ export class WebRequestsService {
       });
     }
     else {
+      let wbReqSvcPtr = this;
       let xhr = new XMLHttpRequest();
       xhr.responseType = 'text';
       xhr.onreadystatechange = function () {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-          console.log('Data incoming:');
-          console.log(this);
+          wbReqSvcPtr.XMLHttpResponse2ConsoleDebugger(this, parameters, headers, 'DELETE', 'red');
           successCallback({ 'data': this.responseText });
         }
       }
@@ -206,6 +206,16 @@ export class WebRequestsService {
       xhr.onerror = errorCallback;
       xhr.send();
     }
+  }
+
+  //#endregion
+
+  //#region [ MÉTODOS DE DEPURAÇÃO HTTP ] 
+
+  private XMLHttpResponse2ConsoleDebugger(xhr: XMLHttpRequest, params: any, headers: any, method: string, color: string): void {
+    console.log(`%c[%c${method}%c] %c${xhr.responseURL}`, 'font-weight: bold; color: black;', `font-weight: bold; color: ${color};`, 'font-weight: bold; color: black;', 'font-weight: bold; color: black;');
+    console.table(params);
+    console.table(headers);
   }
 
   //#endregion
@@ -256,7 +266,7 @@ export class WebRequestsService {
 
   //#region [ CAMADA DE APIS DE AUTENTICAÇÃO ]
 
-  public async AuthRegisterUser(userType: string, userName: string, userEmail: string, userPassword: string, userCpf: string, userCellphone: string, userCampusId: string, userCourseId: string, recaptchaToken: string): Promise<any> {
+  public async AuthRegisterUser(userType: string, userName: string, userEmail: string, userPassword: string, userCpf: string, userCellphone: string, userCampusId: string, userCourseId: string, boolGroupRisk: boolean, recaptchaToken: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.POST(this.webSettings.getApiUrlAddress() + '/api/v1/auth/register', {
           'user_type': userType,
@@ -266,7 +276,8 @@ export class WebRequestsService {
           'user_cpf': userCpf,
           'user_cellphone': userCellphone,
           'user_campus_id': userCampusId,
-          'user_course_id': userCourseId
+          'user_course_id': userCourseId,
+          'user_group_risk_flag': Number(boolGroupRisk)
         },
         {
           'X-Recaptcha-Token': recaptchaToken
@@ -382,6 +393,16 @@ export class WebRequestsService {
       this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/info/course/' + encodeURIComponent(courseId) + '/subjects',
         {},
         {},
+        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
+        (error) => { resolve({ success: false, data: null, error: error }); });
+    });
+  }
+
+  public async InfoUserProfile(token: string): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/info/profile',
+        {},
+        { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
         (error) => { resolve({ success: false, data: null, error: error }); });
     });
@@ -644,16 +665,6 @@ export class WebRequestsService {
     });
   }
 
-  public async MgrShowProfile(token: string): Promise<any> {
-    return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/manager/profile',
-        {},
-        { 'X-Auth-Token': token },
-        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
-        (error) => { resolve({ success: false, data: null, error: error }); });
-    });
-  }
-
   //#endregion
 
   //#region [ CAMADA DE APIS DE ESTUDANTES ]
@@ -717,16 +728,6 @@ export class WebRequestsService {
   public async StdCheckinGenerateQrCode(token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/student/checkin/qrcode',
-        {},
-        { 'X-Auth-Token': token },
-        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
-        (error) => { resolve({ success: false, data: null, error: error }); });
-    });
-  }
-
-  public async StdShowProfile(token: string): Promise<any> {
-    return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/student/profile',
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
@@ -823,16 +824,6 @@ export class WebRequestsService {
   public async PfDeleteMessage(ownMessageId: string, token: string): Promise<any> {
     return new Promise((resolve, _reject) => {
       this.DELETE(this.webSettings.getApiUrlAddress() + '/api/v1/professor/message/' + encodeURIComponent(ownMessageId),
-        {},
-        { 'X-Auth-Token': token },
-        (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
-        (error) => { resolve({ success: false, data: null, error: error }); });
-    });
-  }
-
-  public async PfShowProfile(token: string): Promise<any> {
-    return new Promise((resolve, _reject) => {
-      this.GET(this.webSettings.getApiUrlAddress() + '/api/v1/professor/profile',
         {},
         { 'X-Auth-Token': token },
         (data) => { resolve({ success: true, data: JSON.parse(data.data), error: null }); },
