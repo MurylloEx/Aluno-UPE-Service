@@ -9,7 +9,7 @@
     <img src="https://badgen.net/badge/author/MurylloEx/red?icon=label"/>
 </p>
 
-Para utilizá-la vocês precisa de uma aplicação Angular e utilizar o comando descrito na seção abaixo.
+Para utilizá-la você precisa de uma aplicação Angular e utilizar o comando descrito na seção abaixo.
 
 ## Instalação
 
