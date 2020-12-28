@@ -1,27 +1,85 @@
-# LibAlunoUpe
+<h1 align="center">Biblioteca Aluno UPE (Driver)</h1>
+<p align="center">Essa biblioteca foi feita para conectar com o endpoint HTTPS do aplicativo Aluno UPE.</p>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.1.
+<p align="center">
+    <img src="https://badgen.net/npm/v/@rebase-team/lib-aluno-upe"/> 
+    <img src="https://badgen.net/npm/dt/@rebase-team/lib-aluno-upe"/>
+    <img src="https://badgen.net/npm/license/@rebase-team/lib-aluno-upe"/>
+    <img src="https://badgen.net/npm/types/@rebase-team/lib-aluno-upe"/>
+    <img src="https://badgen.net/badge/author/MurylloEx/red?icon=label"/>
+</p>
 
-## Development server
+Para utilizá-la você precisa de uma aplicação Angular e utilizar o comando descrito na seção abaixo.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Instalação
 
-## Code scaffolding
+```sh
+ionic cordova plugin add cordova-plugin-advanced-http
+npm install @ionic-native/http
+npm install @rebase-team/lib-aluno-upe
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Exemplos de uso
 
-## Build
+``> APPMODULE.TS``
+```typescript
+import { HTTP } from "@ionic-native/http/ngx";
+import { AppComponent } from "./app.component";
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { WebRequestsService } from "@rebase-team/lib-aluno-upe";
+import { IonicModule } from "@ionic/angular";
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+@NgModule({
+  declarations: [],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot()
+  ],
+  providers: [
+    HTTP,
+    WebRequestsService
+  ],
+  bootstrap: [AppComponent],
+  exports: []
+})
+export class AppModule { }
 
-## Running unit tests
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+``> HOME.PAGE.TS``
+```typescript
+import { WebSettingsService, WebResponses, WebRequestsService } from "@rebase-team/lib-aluno-upe";
 
-## Running end-to-end tests
+@Component({
+  selector: "app-home",
+  templateUrl: "home.page.html",
+  styleUrls: ["home.page.scss"],
+})
+export class HomePage implements OnInit {
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+  constructor(
+    private alunoApiSettings: WebSettingsService,
+    private alunoApi: WebRequestsService
+  ) {
+    this.alunoApiSettings.setDebugModeState(true);
+    this.alunoApiSettings.setAppVersion('5.1.43');
+  }
 
-## Further help
+}
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Metadados
+
+Muryllo Pimenta de Oliveira – muryllo.pimenta@upe.br
+
+Distribuído sobre a licença MIT. Veja ``LICENSE`` para mais informações.
+
+## Contribuição
+
+1. Fork it (<https://github.com/MurylloEx/Aluno-UPE-Service/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin feature/fooBar`)
+5. Create a new Pull Request
+
