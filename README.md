@@ -1,4 +1,4 @@
-<h1 align="center">Biblioteca Aluno UPE (Driver)</h1>
+<h1 align="center">Biblioteca UPE Plus (Driver)</h1>
 <p align="center">Essa biblioteca foi feita para conectar com o endpoint HTTPS do aplicativo Aluno UPE.</p>
 
 <p align="center">
