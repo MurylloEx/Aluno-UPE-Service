@@ -77,7 +77,7 @@ Distribuído sobre a licença MIT. Veja ``LICENSE`` para mais informações.
 
 ## Contribuição
 
-1. Fork it (<https://github.com/MurylloEx/Aluno-UPE-Service/fork>)
+1. Fork it (<https://github.com/MurylloEx/App-UPE-Plus-Service/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
