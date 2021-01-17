@@ -1,5 +1,5 @@
 <h1 align="center">Biblioteca UPE Plus (Driver)</h1>
-<p align="center">Essa biblioteca foi feita para conectar com o endpoint HTTPS do aplicativo Aluno UPE.</p>
+<p align="center">Essa biblioteca foi feita para conectar com o endpoint HTTPS do aplicativo UPE+ Multicampi.</p>
 
 <p align="center">
     <img src="https://badgen.net/npm/v/@rebase-team/lib-aluno-upe"/> 
